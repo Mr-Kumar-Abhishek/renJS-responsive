@@ -1,45 +1,55 @@
 
 start:
   - play morningBGM:
-  - show school_morning: WITH FADE
-  - show deuzi: happy AT CENTER WITH FADE
-  - deuzi says: Welcome to our Tutorial Game!
+  - show street_morning: WITH FADE
+  - show deuzi: normal AT CENTER WITH FADE
+  - deuzi says: Hello, are you the new student?
+  - deuzi says happy: Welcome to our Tutorial Game!
   - deuzi says: My name is Deuzilene and I'll be your guide.
-  - show deuzi: normal
-  - deuzi says: So you want to make a Visual Novel.
+  - deuzi says normal: So you want to make a Visual Novel?
   - deuzi says: With RenJS you can easily make games just like this one.
   - deuzi says: RenJS is inspired by Ren'Py and based on PhaserJS.
   - deuzi says: If you are familiar with any of those you have an advantage.
   - deuzi says: And if not...
-  - show deuzi: happy
-  - deuzi says: No problem!
-  - deuzi says: RenJS is made so the text of your story is written intuitively like a script. 
-  - show deuzi: normal
-  - deuzi says: Once you learn the structure, there's no limit to what you can create.
-  - deuzi says: So let's start with...
+  - deuzi says happy: No problem!
+  - deuzi says: RenJS is made so the text of your story is written intuitively like a movie script.
+  - deuzi says normal: Once you learn the structure, there's no limit to what you can create.
+  - deuzi says: Let's get inside and start right away.
+  - hide ALL:
+  - scene: enterSchool
+
+enterSchool:
+  - show school_morning: WITH FADE CONTINUE
+  - show deuzi: WITH FADE
+  - deuzi says: Are you ready?
   - effect SHOWTITLE: 
     title: Chapter 1
     subtitle: The basics 
-  - deuzi says: First thing we'll check is the file structure.
-  - deuzi says: That is, all the files you need for your game to work properly.
-  - deuzi says: We'll use this game as an example.
-  - deuzi says: Have you downloaded it yet?
+  - deuzi says: First things first, let's see what we need to start.
+  - deuzi says: RenJS doesn't come or is tied to any particular IDE (integrated development environment).
+  - deuzi says: That is, a program to read and edit the files of the game, like your story script.
+  - deuzi says: It doesn't have to be anything big or expensive.
+  - deuzi says happy: For example, my favourite is Sublime Text, a free lightweight and multiplatform text editor.
+  - deuzi says normal: Another thing you will need is RenJS itself.
+  - deuzi says: RenJS is a library that will manage the flow, assets and interactivity of your game.
+  - deuzi says: And finally, you will need your game script, in a way that the library can understand.
+  - deuzi says: As a study case, we will use this same game you're playing right now.
+  - deuzi says: You can find a link to download it in this same page, probably.
+  - deuzi says: The game files will include both the library and the script for the Tutorial Game.
+  - deuzi says: So, have you downloaded it yet?
   - choice:
     - I have it!:
-      - show deuzi: happy
-      - deuzi says: Great! What a hardworking student.
+      - deuzi says happy: Great! What a hardworking student!
     - Not yet:
       - show deuzi: angry
-      - deuzi says: What are you waiting for!?
-      - deuzi says: Go do it, I'll wait...
+      - deuzi says angry: What are you waiting for!?
+      - deuzi says normal: Go do it, I'll wait...
       - choice:
         - I have it!:
-          - show deuzi: happy
-          - deuzi says: Good! Let's continue.
-  - show deuzi: normal
-  - deuzi says: Now, open the root folder of this game.
+          - deuzi says happy: Good! Let's continue.
+  - deuzi says normal: Now, open the root folder of this game.
   - deuzi says: It should look like this.
-  - show deuzi: AT LEFT WITH MOVE
+  - show deuzi: AT LEFT WITH MOVE CONTINUE
   - show folders: AT 550,300 WITH FADE
   - deuzi says: There are four folders and a file.
   - deuzi says: RenJS is web based, that means the game runs as a webpage.
@@ -51,18 +61,13 @@ start:
   - deuzi says: The files that concern you as a writer are inside the Story folder.
   - deuzi says: These YAML files are what you will use to make your game.
   - deuzi says: YAML is a human readable data serialization language.
-  - deuzi says: That means that the files contain data in a structure that you can read easily.
-  - deuzi says: And how do you open and edit them?
-  - show deuzi: happy
-  - deuzi says: With your favourite text editor!
-  - deuzi says: Mine is Sublime Text, a lightweight and multiplatform text editor.
-  - show deuzi: normal
+  - deuzi says: That means that the files contain data in a structure that you can read and write easily.
   - deuzi says: In any case, the most important thing about YAML files is that indentation is super important.
   - deuzi says: If you screw up the indentation the game won't even load!
-  - show deuzi: angry
-  - deuzi says: So be very careful about it. Only two spaces per level!
-  - show deuzi: normal
-  - deuzi says: Ok, that was a lot of information, don't you think?
+  - deuzi says angry: So be very careful about it. Only two spaces per level!
+  - hide folders: WITH FADE CONTINUE
+  - show deuzi: AT CENTER WITH MOVE
+  - deuzi says normal: Ok, that was a lot of information, don't you think?
   - choice:
     - Yes, I'm already tired:
       - show deuzi: happy
@@ -82,8 +87,7 @@ start:
   - scene: storySetup
 
 storySetup:
-  - show school_morning:
-  - show jair:
+  - show jair: WITH FADE
   - jair says: So you're the new student.
   - jair says: I've heard a lot about you from Deuzi.
   - jair says: She gets easily excited.
@@ -100,18 +104,17 @@ storySetup:
     subtitle: Setting up the story
   - jair says: All the setup is contained in the Setup.yaml file.
   - jair says: What this means is.
-  - jair says: All your characters, music, sfx and everything else you're planning to use on the story.
-  - jair says: Needs to be declared on this file.
-  - jair says: And of course, you need to know everything before even start to write your story.
+  - jair says: All your characters, music, sfx and everything else you're planning to use on the story,
+  - jair says: needs to be declared on this file.
+  - jair says: That means you need to know everything before even start to write your story.
   - jair says: What kind of writer doesn't though...
   - wait: 300
-  - show jair: happy
-  - jair says: Just joking!
+  - jair says happy: Just joking!
   - jair says: You won't always know what things you need for a story.
   - jair says: So every time you add something, remember to also add it to the setup file.
   - show jair: normal
   - jair says: Let's see how it's made.
-  - show jair: AT RIGHT WITH MOVE
+  - show jair: AT RIGHT WITH MOVE CONTINUE
   - show setupbg: AT 400,350 WITH FADE
   - jair says: First tag you need is setup.
   - jair says: Inside the setup, indented by two spaces you declare each kind of object.
@@ -119,13 +122,12 @@ storySetup:
   - jair says: Each background has a tag, the name that will be used to refer to that background on the story.
   - jair says: And the path to where the background image is located.
   - jair says: If you go to the game's assets folder, you'll find all the images we can use here.
-  - show jair: happy
-  - jair says: Seems like we have an afternoon background.
+  - jair says happy: Seems like we have an afternoon background.
+  - hide setupbg: WITH FADE
   - jair says: Let's use it so I can go home sooner.
   - show school_afternoon: WITH FUSION
-  - hide setupbg: WITH FADE
   - jair says: Well, time to go home.
-  - jair says: See you.
+  - jair says: See you!
   - show jair: normal AT LEFT WITH MOVE
   - show deuzi: angry AT RIGHT
     flipped: true
@@ -138,28 +140,22 @@ storySetup:
   - deuzi says: What? Do you agree with that?
   - choice:
     - Yeah, I checked the file by myself:
-      - show deuzi: normal
-      - deuzi says: Alright, I guess you can continue with more advanced lessons then...
-      - show jair: happy
-      - jair says: See, told you not to treat 'em like a baby.
-      - show deuzi: angry
-      - deuzi says: Shut up, you! We'll have a talk later.
+      - deuzi says normal: Alright, I guess you can continue with more advanced lessons then...
+      - jair says happy: See, told you not to treat 'em like a baby.
+      - deuzi says angry: Shut up, you! We'll have a talk later.
       - hide jair: WITH FADE
-      - show deuzi: normal
-      - deuzi says: Ok, the next lesson starts soon, maybe you should save and rest before moving on.
+      - deuzi says normal: Ok, the next lesson starts soon, maybe you should save and rest before moving on.
       - deuzi says: It's going to be long, but it'll probably be easy for you.
-      - show deuzi: happy
-      - deuzi says: And the teacher is great! She's my best friend.
+      - deuzi says happy: And the teacher is great! She's my best friend.
       - deuzi says: Good luck!
+      - hide deuzi: WITH FADE
       - scene: writingTheStory
     - We barely saw the first part!:
       - deuzi says: Come back here you ratbag, and finish the lesson!
       - jair says: Ok boss, don't worry.
       - hide deuzi: WITH FADE
-  - show jair: angry
-  - jair says: What a snitch.
-  - show jair: normal
-  - jair says: Anyway, let's see the next part.
+  - jair says angry: What a snitch.
+  - jair says normal: Anyway, let's see the next part.
   - jair says: Characters.
   - jair says: The characters are... you know what a character is, come on.
   - show setupch: AT 400,300 WITH FADE
@@ -175,63 +171,54 @@ storySetup:
   - jair says: You always need a normal look, that will be the default.
   - jair says: And you can have as many additional looks as you want.
   - jair says: Deuzi here can be happy or angry.
-  - show jair: happy
-  - jair says: Her range of emotions is infinite though.
-  - jair says: Believe me.
-  - show jair: normal
+  - jair says happy: Her range of emotions is infinite though.
+  - jair says normal: Believe me.
   - hide setupch:
   - jair says: Next up is cgs.
   - show setupcgs: 400,350 WITH FADE
   - jair says: CGs stands for Computer Graphics.
   - jair says: It's an image that you can display and animate.
-  - show jair: angry
-  - jair says: It should have a better name, I know.
+  - jair says angry: It should have a better name, I know.
   - jair says: But for now, it's what we have.
-  - show jair: normal
-  - jair says: Same as always, you have the cgs tag, and then each cgs has a tag and an image file.
-  - jair says: We have two phones.
+  - jair says normal: Same as always, you have the cgs tag, and then each cgs has a tag and an image file.
+  - jair says: "We have two phones: phone1 and phone2"
+  - hide setupcgs:
   - jair says: Could one of those be mine?
-  - show phone1: AT 600,300
+  - show phone1: AT 600,300 CONTINUE
   - show phone2: AT 380,300
   - jair says: I don't think so!
-  - hide phone1:
+  - hide phone1: CONTINUE
   - hide phone2:
-  - hide setupcgs:
   - jair says: "And to finish: audio"
   - show setupaudio: AT 400,350
   - jair says: You can have music, and you can have sfx.
   - jair says: The music will usually be looped, while the sfx will play just once.
   - jair says: For example, the current background music is morningBGM.
   - jair says: Let's make a phone call and check the ringtone...
-  - show phone1: AT 400,300
+  - hide setupaudio:
+  - show phone1: AT 400,300 CONTINUE
   - play ringtoneSFX:
   - text: Tururu Ruru Ruru Ruruuuu
   - jair says: This has to be Deuzi's.
-  - show deuzi: angry AT RIGHT
+  - show deuzi: angry AT RIGHT WITH FADE
     flipped: true
   - deuzi says: Hey! That's my phone!
-  - hide phone1:
+  - hide phone1: CONTINUE
   - hide deuzi: WITH FADE
-  - show jair: happy
-  - jair says: I knew it!
-  - show jair: normal
-  - jair says: Anyway, that's it, lesson over.
-  - hide setupaudio:
+  - jair says happy: I knew it!
+  - jair says normal: Anyway, that's it, lesson over.
   - jair says: I'm going to try and find the place where this bar music is playing.
-  - show jair: happy
-  - jair says: You're not entirely bad.
+  - jair says happy: You're not entirely bad.
   - jair says: See you around.
   - jair says: And don't get lost, your next class is over there!
   - hide jair: WITH FADE
   - scene: writingTheStory
 
 writingTheStory:
-  - show school_afternoon:
-  - show liz: normal
+  - show liz: normal WITH FADE
   - liz says: Hi! I'm Liz and I'll be your writing mentor.
   - liz says: Here we'll see how to actually write the story.
-  - show liz: happy
-  - liz says: Are you ready!?
+  - liz says happy: Are you ready!?
   - effect SHOWTITLE: 
     title: Chapter 3
     subtitle: Writing Part 1
@@ -255,8 +242,8 @@ writingTheStory:
   - liz says: Every action starts with a dash.
   - liz says: Also, after declaring the basic action, you add a colon.
   - liz says: After this, you can add additional parameters.
-  - liz says: But sometimes you don't need anything, like in this case.
-  - liz says: Still, the colon is important..
+  - liz says: But sometimes you don't need anything else, like in this case.
+  - liz says: Still, the colon is important.
   - liz says: Next line we have another action, notice the starting dash.
   - liz says: This one shows the background whose tag is 'school_morning'.
   - liz says: You were there this morning, remember?
@@ -310,14 +297,14 @@ writingTheStory:
   - liz says: So that's it for today. You must be really tired after studying the whole day.
   - show liz: happy
   - liz says: See you tomorrow for part 2!
-  - hide liz: WITH FADE
+  - stop morningBGM: WITH FADE
+  - hide ALL: WITH FADE continue
   - scene: interval
 
 interval:
-  - stop morningBGM: WITH FADE
+  - play cicadas: WITH FADE
   - show room_night:
   - show room_night_light: WITH FUSION
-  - play cicadas: WITH FADE
   - show deuzi: normalC WITH FADE
   - deuzi says: Hey! I knew I was going to find you here.
   - deuzi says: Were you going to sleep already?
@@ -325,101 +312,83 @@ interval:
   - deuzi says: What do you think?
   - interrupt 6:
     - Isn't it a bit awkward???:
-      - show deuzi: angryC
-      - deuzi says: What do you mean?
+      - deuzi says angryC: What do you mean?
       - deuzi says: Because I'm your teacher?  
-      - show deuzi: happyC
-      - deuzi says: We're almost the same age!
-      - show deuzi: normalC
-      - deuzi says: You might be teaching some years from now too. 
-      - show deuzi: angryC
-      - deuzi says: Then you'll see how awkward it is to be called professor and be treatead like and old person.
-      - show deuzi: normalC
-      - deuzi says: Anyway, as I was saying...
+      - deuzi says happyC: We're almost the same age!
+      - deuzi says normalC: You might be teaching some years from now too. 
+      - deuzi says angryC: Then you'll see how awkward it is to be called professor and be treatead like and old person.
+      - deuzi says normalC: Anyway, as I was saying...
   - deuzi says: You probably know it already, but this is a small town.
   - deuzi says: There's not much to see, really.
   - deuzi says: But the cool kids all get together outside the store.
   - deuzi says: Have you been there already?
   - deuzi says: You can't miss it.
   - deuzi says: So, ready to go?
-  - show deuzi: happyC
-  - deuzi says: Let's go!
+  - deuzi says happyC: Let's go!
   - scene: storeAtNight
 
 storeAtNight:
   - play storeBGM:
-  - show store:
+  - show store: 
   - show liz: happyC WITH FADE
   - liz says: Deuzi!!! Over here!
   - show liz: happyC AT 500,600 WITH MOVE
   - show deuzi: happyC AT 300,600 WITH FADE
   - deuzi says: Liz! How are you?
-  - show liz: normalC
-  - liz says: Great! I just got here and was wondering where you were.
-  - show deuzi: normalC
-  - deuzi says: I stopped by the dorms to get my new student, and show them around.
+  - liz says normalC: Great! I just got here and was wondering where you were.
+  - deuzi says normalC: I stopped by the dorms to get my new student, and show them around.
   - show jair: happyC AT LEFT WITH FADE
     flipped: true
   - jair says: You should stop acting like a mama duck to your students.
   - show deuzi: angryC
     flipped: true
-  - deuzi says: Are you jealous for not getting all the attention now?
-  - show jair: angryC
-  - jair says: Yeah, right...
+  - deuzi says: Are you jealous cause your not getting all the attention now?
+  - jair says angryC: Yeah, right...
   - show marco: normalC WITH FADE AT RIGHT
   - marco says: You two fighting again?
-  - show liz: happyC
-  - liz says: Seems like a normal day.
+  - liz says happyC: Seems like a normal day.
   - show deuzi: angryC
     flipped: false
   - deuzi says: Hey! You're supposed to be on my side.
   - deuzi says: He started it!
   - show liz: normalC
-  - show deuzi: normalC
-  - deuzi says: Anyway, good to see you Marco.
-  - show jair: happyC
-  - jair says: Yes, what's the special occasion that made you crawl out of your hole.
-  - show marco: happyC
-  - marco says: Have to get some food before it starts raining.
-  - show liz: angryC
-  - liz says: What do you mean by rain? It's a beautiful day!
+  - deuzi says normalC: Anyway, good to see you Marco.
+  - jair says happyC: Yes, what's the special occasion that made you crawl out of your hole.
+  - marco says happyC: Have to get some food before it starts raining.
+  - liz says angryC: What do you mean by rain? It's a beautiful night!
   - effect THUNDER:
   - marco says: I better hurry. Bye!
-  - hide marco:
+  - hide marco: AT OUTRIGHT WITH MOVE
   - deuzi says: Maybe we should go too, before...
   - ambient RAIN:
-  - jair says: I knew something weird was going to happend when I saw that guy.
+  - jair says: I knew something weird was going to happen when I saw that guy.
   - deuzi says: How could this happen so suddenly?
-  - show liz: normalC
-  - liz says: Well, it's rather easy.
+  - liz says normalC: Well, it's rather easy.
   - liz says: Ambients and effects.
   - jair says: Come on! Not on the streets!
   - show liz: angryC
   - show deuzi: angryC
     flipped: true
   - deuzi says: That's it! You and I are going to have a serious talk!
-  - jair says: If you can catch me!
-  - hide jair:
-  - show deuzi: angryC AT LEFT WITH MOVE
-  - hide deuzi: WITH FADE
-  - show liz: happyC
-  - liz says: I know how that's going to end.
-  - show liz: normalC
-  - liz says: As I was saying, ambient changes are really easy to make.
+  - jair says happyC: If you can catch me!
+  - show jair:
+    flipped: true
+  - show jair: AT OUTLEFT WITH MOVE CONTINUE
+  - show deuzi: AT OUTLEFT WITH MOVE
+  - liz says happyC: I know how that's going to end.
+  - liz says normalC: As I was saying, ambient changes are really easy to make.
   - liz says: Let me show you.
   - show ambientAndEffects:
-  - liz says: Ambients are visual and sound effects that persist through time.
+  - liz says: Ambients are audiovisual effects that persist through time.
   - liz says: Like rain, snow or cherry blossoms falling.
   - liz says: "You call them using the action 'ambient', followed by the ambient name."
   - liz says: There's a few ambients ready to use.
   - liz says: "'RAIN', 'SNOW' and 'SAKURA'."
   - liz says: "To stop an ambient you call a special ambient called 'CLEAR'."
   - ambient CLEAR:
-  - show liz: happyC
-  - liz says: And the rain stops!
+  - liz says happyC: And the rain stops!
   - liz says: Finally!
-  - show liz: normalC
-  - liz says: Effects are visual and sound effects that get played just once.
+  - liz says normalC: Effects are audiovisual effects that get played just once.
   - liz says: Like that thunder from before.
   - liz says: "Some other handy effects are:"
   - liz says: "'SHAKE', a screen shake!"
@@ -431,26 +400,23 @@ storeAtNight:
   - liz says: The extra sounds and images used by ambients and effects have to be declared on the 'extra' section of the setup file.
   - liz says: For example, the RAIN ambient uses a rain sound and a raindrop image and you can use your own.
   - hide ambientAndEffects:
-  - show liz: happyC
-  - liz says: And that's pretty much it.
+  - liz says happyC: And that's pretty much it.
   - show marco: normalC AT LEFT WITH FADE
   - marco says: Where you under the rain all this time?
-  - show liz: normalC
-  - liz says: It's ok, I like rain.
+  - show liz: 
+  - liz says normalC: It's ok, I like the rain.
   - liz says: Did you get your dinner?
-  - show marco: happyC
-  - marco says: I got some things for cooking. Do you want to come over?
+  - marco says happyC: I got some things for cooking. Do you want to come over?
   - liz says: Really? All right, let's go.
-  - show liz: normalC
-  - liz says: By the way, this is Marco, he'll be teaching you about code and branches tomorrow.
-  - show marco: normalC
-  - marco says: Hi, new kid!
+  - liz says normalC: By the way, this is Marco, he'll be teaching you about code and branches tomorrow.
+  - marco says normalC: Hi, new kid!
   - liz says: Do you think you can find your way back to the dorms by yourself?
   - choice:
     - Yes, no problem:
       - liz says: Ok, then I guess I'll see you tomorrow, don't be late!
     - Sure:
       - liz says: Ok, then I guess I'll see you tomorrow, don't be late!
+  - hide ALL:
   - scene: backToTheRoom
 
 backToTheRoom:
@@ -464,7 +430,7 @@ backToTheRoom:
 
 day2:
   - play morningBGM:
-  - show school_morning: WITH FADE
+  - show school_morning: WITH FADE CONTINUE
   - show deuzi: happy AT CENTER WITH FADE
   - deuzi says: Welcome back!
   - deuzi says: How was your first night away from home?
@@ -511,7 +477,7 @@ day2:
   - liz says: Even showing more choices!
   - liz says: But that could get out of hand really fast. Try not to nest more than two choices at a time.
   - show liz: normal
-  - liz says: Now, I told you about what a scene is yesterday, and now I'm going to show you how to change from one scene to the next.
+  - liz says: You learnt yesterday what a scene is, and now I'm going to show you how to change from one scene to the next.
   - show lessonScene:
   - liz says: This example shows a whole scene that can continue in two possible different scenes.
   - liz says: To start another scene we use the action 'scene'. It takes an extra parameter, the name of the scene to be executed next.
@@ -812,7 +778,7 @@ lastClass:
   - deuzi says: And the interrupt box.
   - deuzi says: If you open the interrupt box image, you'll notice it has 4 frames.
   - deuzi says: The first two are for the normal interrupt. 
-  - deuzi says: And the last two are for and interrupt that's just about to disappear.
+  - deuzi says: And the last two are for an interrupt that's just about to disappear.
   - deuzi says: It should look more urgent.
   - hide lessonGUISpritesheets:
   - deuzi says: The last kind of asset to declare is audio.
@@ -919,7 +885,7 @@ graduation:
       - written by
       - lunafromthemoon
       - null
-      - edited by
+      - proofreading by
       - rumpelcita
       - null
       - background art and cgs by

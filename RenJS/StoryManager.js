@@ -26,7 +26,7 @@ function StoryManager(){
         RenJS.cgsManager.hideAll();
         // RenJS.audioManager.stop();
         this.currentScene = _.clone(RenJS.story[name]);
-        RenJS.resolve();
+        
     }
 
     this.getActorType = function(actor){
@@ -60,7 +60,8 @@ function StoryManager(){
     this.interpretAction = function(action){
         var actionParams = {
             withTransition: ["show","hide","play","stop"],
-            withPosition: ["show"]
+            withPosition: ["show"],
+            withContinue: ["show","hide","effect"]
         }
         function getKey(act){
             return _.keys(act)[0];
@@ -68,20 +69,20 @@ function StoryManager(){
         return new Promise(function(resolve, reject) {
             RenJS.control.resolve = resolve;
             var key = getKey(action);
-            var str = key.split(" ");
+            var keyParams = key.split(" ");
             var mainAction,actor;
-            if (str[1] == "says") {
+            if (keyParams[1] == "says") {
                 mainAction = "say";
-                actor = str[0];
+                actor = keyParams[0];
             } else {
-                mainAction = str[0];
-                actor = str[1];
+                mainAction = keyParams[0];
+                actor = keyParams[1];
             }            
             var actorType = RenJS.storyManager.getActorType(actor);
             //parse WITH and AT
             var params = action[key];
             if (_.contains(actionParams.withTransition,mainAction)){
-                str = params ? params.split(" ") : [];
+                var str = params ? params.split(" ") : [];
                 if (str.indexOf("WITH")!=-1){
                     action.transitionName = str[str.indexOf("WITH")+1];                    
                 } else {
@@ -90,7 +91,7 @@ function StoryManager(){
                 action.transition = RenJS.transitions[action.transitionName];
             }
             if (params && _.contains(actionParams.withPosition,mainAction)){
-                str = params ? params.split(" ") : [];
+                var str = params ? params.split(" ") : [];
                 if (str.indexOf("AT")!=-1){
                     action.position = str[str.indexOf("AT")+1];
                     if (_.has(config.positions,action.position)){
@@ -104,13 +105,67 @@ function StoryManager(){
                     action.look = str[0];
                 }
             }
+            var contAfterTrans = false;
+            if (params && _.contains(actionParams.withContinue,mainAction)){
+                var str = params ? params.split(" ") : [];
+                contAfterTrans = str.indexOf("CONTINUE")!=-1
+            }
             action.manager = RenJS[actorType+"Manager"];
             RenJS.control.action = mainAction; 
             RenJS.control.wholeAction = params; 
             RenJS.control.nextAction = null; 
             console.log("Doing "+RenJS.control.action);
             switch(RenJS.control.action){
-                // case "custom": RenJS.control.action = "Custom fct"; action.execute(); break;
+                // Asnyc actions, will resolve after some actions
+                case "show" :         
+                    var transitioning = action.manager.show(actor,action.transition,action);                    
+                    if (!contAfterTrans) return transitioning.then(RenJS.resolve);
+                    break;
+                case "hide" : 
+                    if (actor == "CHARS"){
+                        return RenJS.chManager.hideAll(action.transition).then(RenJS.resolve);
+                    } 
+                    if (actor == "ALL"){
+                        var promises = [RenJS.bgManager.hide(),RenJS.chManager.hideAll(action.transition),RenJS.cgsManager.hideAll()];
+                        return Promise.all(promises).then(RenJS.resolve);
+                    }
+                    var transitioning = action.manager.hide(actor,action.transition);
+                    if (!contAfterTrans) return transitioning.then(RenJS.resolve);
+                    break;
+                case "animate" :
+                    var transitioning = RenJS.cgsManager.animate(actor,action,action.time);
+                    if (!contAfterTrans) return transitioning.then(RenJS.resolve);
+                    break;
+                 case "effect" :
+                    var transitioning = RenJS.effects[actor](action);
+                    if (!contAfterTrans) return transitioning.then(RenJS.resolve);
+                    break;
+                case "say" : 
+                    var look = (keyParams.length > 2) ? keyParams[2] : null;
+                    return RenJS.textManager.say(actor,look,params).then(RenJS.resolve);
+                case "text" :
+                    return RenJS.textManager.show(params).then(RenJS.resolve);
+                // Wait for user action input, will resolve on its own
+                case "wait" : 
+                    if (params == "click"){
+                        RenJS.waitForClick();
+                    } else {
+                        RenJS.waitTimeout(parseInt(params));
+                    }
+                    return;
+                case "call" :
+                    return RenJS.customContent[actor](params);
+                case "choice" : 
+                    RenJS.control.skipping = false;
+                    return RenJS.logicManager.showChoices(_.clone(params));
+                case "visualchoice" :
+                    RenJS.control.skipping = false;
+                    return RenJS.logicManager.showVisualChoices(_.clone(params));
+                
+                // Synch actions, will resolve after case
+                case "interrupt" : 
+                    RenJS.logicManager.interrupt(actor,_.clone(params));
+                    break;
                 case "var" :
                     RenJS.logicManager.setVar(actor,params);
                     break;
@@ -127,51 +182,6 @@ function StoryManager(){
                     RenJS.logicManager.branch(condition,branches);
                     break;
                 case "else" :
-                    RenJS.resolve();
-                    break;
-                case "show" :                     
-                    action.manager.show(actor,action.transition,action);
-                    break;
-                case "hide" : 
-                    action.manager.hide(actor,action.transition);
-                    break;
-                case "say" : 
-                    RenJS.textManager.say(actor,params);
-                    break;
-                case "wait" : 
-                    if (params == "click"){
-                        RenJS.waitForClick();
-                    } else {
-                        RenJS.waitTimeout(parseInt(params));
-                    }
-                    break;
-                case "animate" :
-                    console.log(action);
-                    RenJS.cgsManager.animate(actor,action,action.time)
-                    break;
-                case "choice" : 
-                    // debugger;
-                    RenJS.control.skipping = false;
-                    RenJS.logicManager.showChoices(_.clone(params));
-                    break;
-                case "visualchoice" :
-                    RenJS.control.skipping = false;
-                    RenJS.logicManager.showVisualChoices(_.clone(params));
-                    break;
-                case "interrupt" : 
-                    RenJS.logicManager.interrupt(actor,_.clone(params));
-                    // debugger;
-                    // if (params == "stop"){
-                    //     // console.log("interrupting");
-                    //     RenJS.logicManager.interrupting = false;
-                    //     RenJS.logicManager.choose();
-                    // } else {
-                    //     RenJS.logicManager.interrupting = true;
-                    //     RenJS.logicManager.showChoices(_.clone(params));
-                    // }
-                    break;
-                case "text" :
-                    RenJS.textManager.show(params);
                     break;
                 case "play" :
                     // debugger;
@@ -179,13 +189,10 @@ function StoryManager(){
                         RenJS.audioManager.play(actor, "bgm", action.looped, action.transitionName);
                     } else {
                         RenJS.audioManager.playSFX(actor);
-                        RenJS.resolve();
                     }
                     break;
                 case "stop" :
                     RenJS.audioManager.stop("bgm",action.transitionName);
-                case "effect" :
-                    RenJS.effects[actor](action);
                     break;
                 case "ambient" :
                     RenJS.ambient[actor](action.sfx);
@@ -193,14 +200,10 @@ function StoryManager(){
                 case "scene" :
                     RenJS.storyManager.startScene(params);
                     break;
-                case "call" :
-                    RenJS.customContent[actor](params);
-                    break;
-                case "jsScript" :
-                    params();
-                    break;
+                
             }
-            
+            // Resolve synch actions
+            RenJS.resolve();
         }); 
     }
 

@@ -4,6 +4,9 @@ var game = new Phaser.Game(globalConfig.w, globalConfig.h, Phaser[globalConfig.m
 var bootstrap = {
 
   init: function() {
+    if (globalConfig.i18n){
+      return;
+    }
     if (!(globalConfig.scaleMode == "EXACT_FIT")){
       game.scale.pageAlignHorizontally = true;
       game.scale.pageAlignVertically = true;
@@ -13,10 +16,10 @@ var bootstrap = {
   },
 
   preload: function () {
-    game.load.image('splash',  globalConfig.splash.loadingScreen);
+    game.load.image('splash',  preparePath(globalConfig.splash.loadingScreen));
     if (globalConfig.splash.loadingBar) {
-      game.load.image('loading',  globalConfig.splash.loadingBar.fullBar);
-    }    
+      game.load.image('loading',  preparePath(globalConfig.splash.loadingBar.fullBar));
+    }
     game.load.script('preload',  'RenJS/Preload.js');
   },
 
@@ -27,5 +30,22 @@ var bootstrap = {
 
 };
 
+function preparePath(path){
+  if (globalConfig.i18n){
+    return path.replace("LANG",globalConfig.i18n.current);
+  } else {
+    return path;
+  }
+}
+
 game.state.add('bootstrap', bootstrap);
-game.state.start('bootstrap');
+
+if (globalConfig.i18n){
+  game.state.add('chooseLang', chooseLang);
+  game.state.start('chooseLang');
+} else {
+  game.state.start('bootstrap');
+}
+
+
+

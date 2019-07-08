@@ -2,13 +2,17 @@
 var RenJS = {
     pause: function(){
         RenJS.control.paused = true;
+        RenJS.control.skipping = false;
+        RenJS.control.auto = false;
         RenJS.gui.hideHUD();
     },
 
     unpause: function(){
         RenJS.control.paused = false;
         RenJS.gui.showHUD();
-        RenJS.storyManager.interpret();
+        if (!RenJS.control.resolve){            
+            RenJS.storyManager.interpret();
+        }
     },
 
     setBlackOverlay: function(){
@@ -52,6 +56,9 @@ var RenJS = {
         config.skiptime = 1000;
         RenJS.control.auto = true;
         console.log("autoplaying");
+        if (RenJS.control.waitForClick){
+            RenJS.control.nextAction()
+        }
         // RenJS.resolve();
     },
 
@@ -102,7 +109,7 @@ var RenJS = {
         var stack = _.last(data.stack);
         var scene = stack.scene;
         var allActions = _.clone(RenJS.story[scene]);
-        var actions = allActions.slice(stack.c+1);
+        var actions = allActions.slice(stack.c);
         if(data.stack.length != 1){
             for (var i = data.stack.length-2;i>=0;i--){
                 var nestedAction = allActions[stack.c];
@@ -184,7 +191,7 @@ var RenJS = {
             RenJS.control.skipping = false;
             RenJS.control.auto = false;
         }
-        },
+    },
 
     initInput: function () {
         // adds the control input

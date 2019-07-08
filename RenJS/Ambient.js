@@ -25,7 +25,6 @@ RenJS.ambient = {
     BGS: function(sound){
         if (sound) {
             RenJS.audioManager.play(sound,"bgs",true,"FADE");   
-            RenJS.resolve(); 
         }
     },
     CLEAR: function(){
@@ -48,7 +47,6 @@ RenJS.ambient = {
         });
         RenJS.ambient.clearFunctions = [];
         RenJS.audioManager.stop("bgs","FADE");
-        RenJS.resolve();
     },   
     STATIC: function(){
         var static = RenJS.storyManager.behindCharactersSprites.create(game.world.centerX,game.world.centerY, 'static');
@@ -58,7 +56,6 @@ RenJS.ambient = {
         RenJS.audioManager.play("staticSound","bgs",true,"CUT"); 
         RenJS.ambient.animation.play(10, true,true);
         RenJS.ambient.animation.spriteParent = static;
-        RenJS.resolve();
     },
     RAIN: function() {
         RenJS.audioManager.play("rain","bgs",true,"FADE"); 
@@ -72,7 +69,6 @@ RenJS.ambient = {
         });        
         RenJS.ambient.emitters[0].start(false, 1600, 5,0);
         RenJS.ambient.maxLifespan = 1600;
-        RenJS.resolve();
     },
     SAKURA: function(){
         RenJS.ambient.addEmitter({
@@ -94,11 +90,9 @@ RenJS.ambient = {
         RenJS.ambient.emitters[0].start(false, 6000, 20);
         RenJS.ambient.emitters[1].start(false, 5000, 40);
         RenJS.ambient.maxLifespan = 6000;
-        RenJS.resolve();
     },
     BADTRIP: function(){
         RenJS.ambient.drugsFlag = 2;
-        RenJS.resolve();
     },
     DRUGS: function(){
         console.log("doing drugs");
@@ -192,7 +186,6 @@ RenJS.ambient = {
         RenJS.ambient.clearFunctions.push(function(){
             RenJS.ambient.drugsState = 2;
         });  
-        RenJS.resolve();
     },
     SNOW: function(){
         RenJS.ambient.addEmitter({
@@ -223,7 +216,6 @@ RenJS.ambient = {
         RenJS.ambient.emitters[1].start(false, 5000, 40);
         RenJS.ambient.emitters[2].start(false, 4000, 1000);
         RenJS.ambient.maxLifespan = 6000;
-        RenJS.resolve();
     }
 
 }

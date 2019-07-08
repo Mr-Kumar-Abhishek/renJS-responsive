@@ -42,7 +42,7 @@ function CharactersManager(){
             ch.lastScale = props.flipped ? -1 : 1;
         }
         this.showing[name] = {look: ch.currentLook.name,position:props.position,flipped:(ch.lastScale==-1)};
-        transition(oldLook,ch.currentLook,props.position,ch.lastScale,RenJS.storyManager.characterSprites);
+        return transition(oldLook,ch.currentLook,props.position,ch.lastScale,RenJS.storyManager.characterSprites);
     }
 
     this.hide = function(name,transition){
@@ -51,7 +51,7 @@ function CharactersManager(){
         ch.currentLook = null;
         delete this.showing[name];
         // console.log("hiding ch "+name);
-        transition(oldLook,null);
+        return transition(oldLook,null);
     }
 
     this.set = function (showing) {
@@ -68,9 +68,14 @@ function CharactersManager(){
     }
 
     this.hideAll = function(){
-        _.each(this.showing,function(showing,name){
-            this.hide(name,RenJS.transitions.CUT);
-        },this);
+        return new Promise(function(resolve,reject){
+            var promises = []
+            var chars = _.keys(RenJS.chManager.showing)
+            _.each(chars,function(char){
+                promises.push(RenJS.chManager.hide(char,RenJS.transitions.FADEOUT));
+            },RenJS.chManager)
+            Promise.all(promises).then(resolve);
+        });
     }
 
     this.isCharacter = function(actor){

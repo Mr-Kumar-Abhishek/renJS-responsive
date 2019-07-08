@@ -33,11 +33,11 @@ var preload = {
     game.load.script('Transitions',  'RenJS/Transitions.js');
     game.load.script('CustomContent',  'RenJS/CustomContent.js');
     //load Story Files
-    loadStyle(globalConfig.fonts);
-    game.load.text("guiConfig", globalConfig.guiConfig);
-    game.load.text("storySetup", globalConfig.storySetup);
+    loadStyle(preparePath(globalConfig.fonts));
+    game.load.text("guiConfig", preparePath(globalConfig.guiConfig));
+    game.load.text("storySetup", preparePath(globalConfig.storySetup));
     for (var i = globalConfig.storyText.length - 1; i >= 0; i--) {
-      game.load.text("story"+i, globalConfig.storyText[i]);
+      game.load.text("story"+i, preparePath(globalConfig.storyText[i]));
     };
   },
 
@@ -80,32 +80,40 @@ var preloadStory = {
     //preload gui
     _.each(RenJS.gui.getAssets(),function(asset){
         if (asset.type == "spritesheet"){
-            game.load.spritesheet(asset.key, asset.file, asset.w, asset.h);
+            game.load.spritesheet(asset.key, preparePath(asset.file), asset.w, asset.h);
         } else {
-            game.load[asset.type](asset.key, asset.file);
+            game.load[asset.type](asset.key, preparePath(asset.file));
         }
     });
 
     //preload backgrounds
     _.each(RenJS.setup.backgrounds,function(filename,background){
-        game.load.image(background, filename);
+        game.load.image(background, preparePath(filename));
     });
     //preload cgs
-    _.each(RenJS.setup.cgs,function(filename,background){
-        game.load.image(background, filename);
+    _.each(RenJS.setup.cgs,function(cgs,key){
+        if (typeof cgs === 'string' || cgs instanceof String){
+            // normal cgs
+            game.load.image(key, preparePath(cgs));
+        } else {
+            // spritesheet animation      
+            var str = cgs.spritesheet.split(" ");            
+            game.load.spritesheet(key, preparePath(str[0]), parseInt(str[1]),parseInt(str[2]));
+        }
+        
     });
     // preload background music
     _.each(RenJS.setup.music,function(filename,music){
-        game.load.audio(music, filename);
+        game.load.audio(music, preparePath(filename));
     });
     //preload sfx
     _.each(RenJS.setup.sfx,function(filename,key){
-        game.load.audio(key, filename);
+        game.load.audio(key, preparePath(filename));
     },this);
     //preload characters
     _.each(RenJS.setup.characters,function(character,name){
         _.each(character.looks,function(filename,look){
-            game.load.image(name+"_"+look, filename);
+            game.load.image(name+"_"+look, preparePath(filename));
         });
     });
     if (RenJS.setup.extra){
@@ -113,12 +121,12 @@ var preloadStory = {
             if (type=="spritesheets"){
                 _.each(assets,function(file,key){
                     var str = file.split(" ");
-                    game.load.spritesheet(key, str[0], parseInt(str[1]),parseInt(str[2]));
+                    game.load.spritesheet(key, preparePath(str[0]), parseInt(str[1]),parseInt(str[2]));
                 });
             } else {
                 _.each(assets,function(file,key){
                     // console.log("loading "+key+ " "+file+" of type "+type);
-                    game.load[type](key, file);
+                    game.load[type](key, preparePath(file));
                 });
             }
         });
@@ -150,7 +158,6 @@ var init = {
     // }
   }
 }
-
 
 //utils
 

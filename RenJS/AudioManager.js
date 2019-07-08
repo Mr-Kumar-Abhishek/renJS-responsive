@@ -98,9 +98,7 @@ function AudioManager(){
                 this.musicList[key].play("",0,1,looped);
             }
         }
-        if (type == "bgm") {
-            RenJS.resolve();    
-        }
+        
     }
 
     this.stopAll = function(){
@@ -120,9 +118,6 @@ function AudioManager(){
             } else {
                 oldAudio.stop();
             }
-        }
-        if (type == "bgm") {
-            RenJS.resolve();    
         }
     }
 

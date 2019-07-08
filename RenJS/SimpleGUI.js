@@ -30,7 +30,7 @@ function SimpleGUI(meta){
     this.init = function(){
         this.initHUD();
         this.initChoices();
-        
+        RenJS.logicManager.vars.choicesLog = {};
 
         this.menus = {};
         _.each(this.elements.menus,function(menu,name){
@@ -199,7 +199,7 @@ function SimpleGUI(meta){
         settings: function(){
             // RenJS.onTap();
             RenJS.pause();
-            RenJS.resolve();
+            // RenJS.resolve();
             RenJS.gui.showMenu("settings");
         },
         return: function(){
@@ -270,8 +270,16 @@ function SimpleGUI(meta){
             position = {x:game.world.centerX};
             position.y = game.world.centerY - (choices.length*this.elements.hud.choice.separation)/2;
             position.anchor = {x:0.5,y:0};
-        }       
-
+        }
+        var cAction = RenJS.control.execStack[RenJS.control.execStack.length-1].c;
+        var cScene = RenJS.control.execStack[RenJS.control.execStack.length-1].scene;
+        var choiceLog = RenJS.logicManager.vars.choicesLog;
+        if (!choiceLog[cScene]){
+            choiceLog[cScene] = {}
+        }
+        if (!choiceLog[cScene][cAction]){
+            choiceLog[cScene][cAction] = []
+        }
         _.each(choices,function(choice,index){
             var y = position.y + this.elements.hud.choice.separation*index;
             var key = "choice";
@@ -286,6 +294,8 @@ function SimpleGUI(meta){
                 }
             }
             var chBox = game.add.button(position.x, y, key, function(){
+                choiceLog[cScene][cAction].push(choice.choiceText);
+                RenJS.logicManager.vars.choicesLog = choiceLog;
                 RenJS.logicManager.choose(index,choice.choiceText);
             }, RenJS.logicManager, frames[0],frames[1],frames[2],frames[3],this.hud.choices.group);
             if (position.anchor){
@@ -299,6 +309,10 @@ function SimpleGUI(meta){
             }
             chText.setTextBounds(textPosition[0],textPosition[1], chBox.width, chBox.height);
             chBox.addChild(chText);
+            if (globalConfig.logChoices && choiceLog[cScene][cAction].indexOf(choice.choiceText) != -1){
+                //TODO: Change your box however you want to!
+                chBox.tint = 0xAA8282;
+            }
             this.hud.choices.map[choice.choiceId]=chBox;
         },this);
     }
@@ -357,12 +371,12 @@ function SimpleGUI(meta){
         textObj.text = "";
         var words = text.split("");
         var count = 0;
-        var loop = setInterval(function(){
+        this.textLoop = setInterval(function(){
                      
             textObj.text += (words[count]);
             count++;
             if (count >= words.length){
-                clearTimeout(loop);
+                clearTimeout(RenJS.gui.textLoop);
                 // debugger;
                 RenJS.gui.showCTC();
                 callback();
@@ -372,7 +386,7 @@ function SimpleGUI(meta){
         this.hud.messageBox.visible = true;
         if (!RenJS.control.auto){
             RenJS.waitForClick(function(){
-                clearTimeout(loop);
+                clearTimeout(RenJS.gui.textLoop);
                 textObj.text = text;
                 RenJS.gui.showCTC();
                 callback();

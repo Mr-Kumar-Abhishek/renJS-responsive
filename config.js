@@ -10,6 +10,7 @@ var globalConfig = {
       position: {x:111,y:462}
     }
   },
+  logChoices: false,
   fonts: "assets/gui/fonts.css",
   guiConfig: "story/GUI.yaml",
   storySetup: "story/Setup.yaml",

@@ -23,11 +23,11 @@ function BackgroundManager(){
         this.current = name ? this.backgrounds[name] : null;
         // console.log("showing bg "+name);
         // debugger;
-        transition(oldBg,this.current,{x:game.world.centerX,y:game.world.centerY},1,RenJS.storyManager.backgroundSprites);        
+        return transition(oldBg,this.current,{x:game.world.centerX,y:game.world.centerY},1,RenJS.storyManager.backgroundSprites);        
     }
 
     this.hide = function(bg,transition){   
-        this.show(null,transition ? transition : RenJS.transitions.FADEOUT);
+        return this.show(null,transition ? transition : RenJS.transitions.FADEOUT);
     }
 
     this.isBackground = function(actor){

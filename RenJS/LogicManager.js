@@ -21,12 +21,11 @@ function LogicManager(){
         } catch(e) {
             this.vars[name] = value;
         }
-        RenJS.resolve();
     }
 
     this.evalExpression = function(expression){
         expression = expression+"";
-        expression = this.parseVars(expression);
+        expression = this.parseVars(expression,true);
         try {
             return eval(expression);
         } catch(e) {
@@ -37,7 +36,6 @@ function LogicManager(){
 
     this.branch = function(expression,branches){
         var val = this.evalExpression(expression);
-            // debugger;
         var actions;
         if (val && branches.ISTRUE){
             actions = branches.ISTRUE;
@@ -49,17 +47,19 @@ function LogicManager(){
         if(actions){
             RenJS.storyManager.currentScene = _.union(actions,RenJS.storyManager.currentScene);
             RenJS.control.execStack.unshift({c:-1,total: actions.length, action: "if"});
-        }
-        
-        RenJS.resolve();
+        }        
     }
 
-    this.parseVars = function(text){
+    this.parseVars = function(text,useQM){
         var vars = text.match(/\{(.*?)\}/g);
         if (vars) {
             _.each(vars,function(v){
-                var varName = v.substring(1,v.length-1);this.evalExpression
-                text = text.replace(v,this.vars[varName]);
+                var varName = v.substring(1,v.length-1);
+                var value = this.vars[varName]
+                if (useQM && typeof value == "string"){
+                    value = '\"'+value+'\"';
+                }
+                text = text.replace(v,value);
             },this);
         }
         return text;
@@ -67,7 +67,7 @@ function LogicManager(){
 
     this.evalChoice = function(choice){
         var choiceText = _.keys(choice)[0];
-        choice.choiceId = "Choice"+Date.now();
+        choice.choiceId = "Choice"+guid();
         choice.choiceText = choiceText;
         var params = choiceText.split("!if");
         if (params.length > 1){
@@ -105,13 +105,8 @@ function LogicManager(){
     this.showChoices = function(choices){
         var ch = _.map(choices,_.clone);
         ch = _.filter(ch,this.evalChoice);
-        // debugger;
         RenJS.logicManager.currentChoices = RenJS.logicManager.currentChoices.concat(ch);     
         RenJS.gui.showChoices(RenJS.logicManager.currentChoices); 
-        if (RenJS.logicManager.interrupting){
-            RenJS.control.execStack[0].interrupting = RenJS.control.execStack[0].c;
-            RenJS.resolve();
-        }
     }
 
     this.interrupt = function(steps,choices){
@@ -143,6 +138,7 @@ function LogicManager(){
         }
         
         this.showChoices(choices);
+        RenJS.control.execStack[0].interrupting = RenJS.control.execStack[0].c;
     }
 
     this.clearChoices = function(){
@@ -174,3 +170,12 @@ function LogicManager(){
     }
 }
 
+function guid() {
+  return "ss".replace(/s/g, s4);
+}
+
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+}
