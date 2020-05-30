@@ -19,3 +19,9 @@ var globalConfig = {
         "story/YourStory.yaml"
     ],
 }
+
+function lockOrient() {
+	screen.orientation.lock('landscape');
+}
+
+window.onload = lockOrient;
